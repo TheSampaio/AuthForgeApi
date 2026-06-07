@@ -1,15 +1,19 @@
+using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersController(
+        IUsersService usersService
+    ) : ControllerBase
     {
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
-            return Ok("Just a test from the 'Users' controller.");
+            var result = await usersService.GetAllAsync();
+            return Ok(result);
         }
     }
 }
