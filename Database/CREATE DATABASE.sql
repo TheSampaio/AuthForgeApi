@@ -1,0 +1,38 @@
+CREATE DATABASE AuthForge;
+GO
+
+USE AuthForge;
+GO
+
+CREATE TABLE Persons
+(
+    [Id] INT PRIMARY KEY IDENTITY(1, 1),
+    [Name] NVARCHAR(64) NOT NULL,
+    [Surname] NVARCHAR(64) NOT NULL,
+    [Birthdate] DATETIME2 NOT NULL,
+    [IsActive] BIT NOT NULL DEFAULT 1,
+    [CreatedAt] DATETIME2 NOT NULL DEFAULT GETDATE()
+);
+GO
+
+CREATE TABLE Users
+(
+    [Id] INT PRIMARY KEY IDENTITY(1, 1),
+    [PersonId] INT NOT NULL,
+    [IsActive] BIT NOT NULL DEFAULT 1,
+    [CreatedAt] DATETIME2 NOT NULL DEFAULT GETDATE()
+
+    FOREIGN KEY (PersonId) REFERENCES Persons.[Id]
+);
+GO
+
+CREATE TABLE Accounts
+(
+    [Id] INT PRIMARY KEY IDENTITY(1, 1),
+    [UserId] INT NOT NULL,
+    [IsActive] BIT NOT NULL DEFAULT 1,
+    [CreatedAt] DATETIME2 NOT NULL DEFAULT GETDATE()
+
+    FOREIGN KEY (UserId) REFERENCES Users.[Id]
+);
+GO
