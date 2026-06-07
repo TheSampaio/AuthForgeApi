@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Application.Services;
 using Domain.Interfaces;
 using Infrastructure.Repositories;
+using Infrastructure.Security;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -20,6 +21,9 @@ builder.Services
     .AddScoped<IDbConnection>(_ => new SqlConnection(connectionString))
     .AddScoped<IUsersService, UsersService>()
     .AddScoped<IUsersRepository, UsersRepository>();
+
+// Singletons
+builder.Services.AddSingleton<ICryptoService, Argon2CryptoService>();
 
 // URLs and query strings will be in lowercase
 builder.Services.Configure<RouteOptions>(options =>

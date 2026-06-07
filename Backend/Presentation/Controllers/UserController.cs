@@ -10,9 +10,9 @@ namespace Presentation.Controllers
     ) : ControllerBase
     {
         /// <summary>
-        /// Get all active users.
+        /// Retrieves a list of all active users.
         /// </summary>
-        /// <returns>A list of all active users.</returns>
+        /// <returns>A collection of user records.</returns>
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -21,10 +21,10 @@ namespace Presentation.Controllers
         }
 
         /// <summary>
-        /// Get user by id.
+        /// Retrieves a specific user by their unique identifier.
         /// </summary>
-        /// <param name="id">The id of the user.</param>
-        /// <returns>The user with the specified id.</returns>
+        /// <param name="id">The unique identifier of the user.</param>
+        /// <returns>The requested user record, or HTTP 404 if not found.</returns>
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
