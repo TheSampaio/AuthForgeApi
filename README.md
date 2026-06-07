@@ -8,6 +8,7 @@ A robust and modular authentication API built from scratch using modern software
 
 AuthForge is an independent identity provider designed to serve as a centralized authentication service for applications, APIs, and microservices. The project was created with a strong focus on Clean Architecture, maintainability, security, and scalability.
 
+![AuthForge Showcase](.github/images/showcase-auth-forge.jpg)
 
 ## ✨ Features
 
