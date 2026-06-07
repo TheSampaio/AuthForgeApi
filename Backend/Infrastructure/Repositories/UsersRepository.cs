@@ -26,5 +26,36 @@ namespace Infrastructure.Repositories
             );
             return result;
         }
+
+        public async Task<UsersEntity?> GetByEmailAsync(string email)
+        {
+            var parameters = new { Email = email };
+            var result = await dbConnection.QueryFirstOrDefaultAsync<UsersEntity>(
+                UsersStatements.SelectByEmail,
+                parameters
+             );
+            return result;
+        }
+
+        public async Task<int> CreateAsync(UsersEntity user)
+        {
+            var parameters = new { 
+                user.FirstName,
+                user.LastName,
+                user.Email,
+                user.PasswordHash,
+                user.Birthdate,
+                IsActive = 1,
+                OperationUserId = 0
+            };
+
+            var result = await dbConnection.ExecuteScalarAsync<int>(
+                "sp_UpsertUser",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+
+            return result;
+        }
     }
 }
