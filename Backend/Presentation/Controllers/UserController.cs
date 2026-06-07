@@ -9,6 +9,10 @@ namespace Presentation.Controllers
         IUsersService usersService
     ) : ControllerBase
     {
+        /// <summary>
+        /// Get all active users.
+        /// </summary>
+        /// <returns>A list of all active users.</returns>
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -16,6 +20,11 @@ namespace Presentation.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get user by id.
+        /// </summary>
+        /// <param name="id">The id of the user.</param>
+        /// <returns>The user with the specified id.</returns>
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
