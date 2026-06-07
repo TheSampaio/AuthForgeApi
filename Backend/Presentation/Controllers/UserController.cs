@@ -15,5 +15,14 @@ namespace Presentation.Controllers
             var result = await usersService.GetAllAsync();
             return Ok(result);
         }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetByIdAsync(int id)
+        {
+            var result = await usersService.GetByIdAsync(id);
+            return result is null
+                ? NotFound()
+                : Ok(result);
+        }
     }
 }

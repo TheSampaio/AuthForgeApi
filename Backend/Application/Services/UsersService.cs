@@ -20,9 +20,17 @@ namespace Application.Services
             ));
         }
 
-        public Task<GetUsersResponse?> GetByIdAsync(int id)
+        public async Task<GetUsersResponse?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await usersRepository.GetByIdAsync(id);
+            return result is null
+                ? null
+                : new GetUsersResponse(
+                    result.Id,
+                    result.FirstName,
+                    result.LastName,
+                    result.Email
+                );
         }
     }
 }

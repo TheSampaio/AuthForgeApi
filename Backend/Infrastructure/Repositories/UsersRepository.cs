@@ -17,9 +17,14 @@ namespace Infrastructure.Repositories
             return result;
         }
 
-        public Task<UsersEntity?> GetByIdAsync(int id)
+        public async Task<UsersEntity?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var parameters = new { Id = id };
+            var result = await dbConnection.QueryFirstOrDefaultAsync<UsersEntity>(
+                UsersStatements.SelectById,
+                parameters
+            );
+            return result;
         }
     }
 }
