@@ -6,5 +6,7 @@ namespace Domain.Interfaces
     {
         Task<IEnumerable<UsersEntity>> GetAllAsync();
         Task<UsersEntity?> GetByIdAsync(int id);
+        Task<UsersEntity?> GetByEmailAsync(string email);
+        Task<int> CreateAsync(UsersEntity user);
     }
 }

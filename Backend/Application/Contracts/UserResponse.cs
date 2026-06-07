@@ -1,6 +1,6 @@
 ﻿namespace Application.Contracts
 {
-    public record GetUsersResponse
+    public record UserResponse
     (
         int Id,
         string FirstName,

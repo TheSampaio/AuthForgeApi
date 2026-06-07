@@ -9,10 +9,10 @@ namespace Application.Services
     )
         : IUsersService
     {
-        public async Task<IEnumerable<GetUsersResponse>> GetAllAsync()
+        public async Task<IEnumerable<UserResponse>> GetAllAsync()
         {
             var result = await usersRepository.GetAllAsync();
-            return result.Select(user => new GetUsersResponse(
+            return result.Select(user => new UserResponse(
                 user.Id,
                 user.FirstName,
                 user.LastName,
@@ -20,12 +20,12 @@ namespace Application.Services
             ));
         }
 
-        public async Task<GetUsersResponse?> GetByIdAsync(int id)
+        public async Task<UserResponse?> GetByIdAsync(int id)
         {
             var result = await usersRepository.GetByIdAsync(id);
             return result is null
                 ? null
-                : new GetUsersResponse(
+                : new UserResponse(
                     result.Id,
                     result.FirstName,
                     result.LastName,
