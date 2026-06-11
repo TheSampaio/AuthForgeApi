@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Konscious.Security.Cryptography;
+using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,6 +11,15 @@ namespace Infrastructure.Security
         private const int DegreeOfParallelism = 8;
         private const int Iterations = 4;
         private const int MemorySize = 1024 * 128; // 128 MB
+        private readonly byte[] _pepper;
+
+        public Argon2CryptoService(IConfiguration configuration)
+        {
+            var pepperString = configuration["CryptoSettings:Pepper"]
+                ?? throw new InvalidOperationException("Crypto Pepper missing.");
+
+            _pepper = Encoding.UTF8.GetBytes(pepperString);
+        }
 
         public string HashPassword(string password)
         {
@@ -41,14 +51,15 @@ namespace Infrastructure.Security
             return buffer;
         }
 
-        private static byte[] GenerateHash(string password, byte[] salt)
+        private byte[] GenerateHash(string password, byte[] salt)
         {
             using var argon2 = new Argon2id(Encoding.UTF8.GetBytes(password))
             {
                 Salt = salt,
                 DegreeOfParallelism = DegreeOfParallelism,
                 Iterations = Iterations,
-                MemorySize = MemorySize
+                MemorySize = MemorySize,
+                KnownSecret = _pepper
             };
 
             return argon2.GetBytes(32);
