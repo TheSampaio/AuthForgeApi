@@ -16,6 +16,7 @@ namespace Application.Services
         public async Task<int> RegisterAsync(RegisterRequest request)
         {
             var existingUser = await usersRepository.GetByEmailAsync(request.Email);
+
             if (existingUser is not null)
                 throw new InvalidOperationException("Email is already in use.");
 
