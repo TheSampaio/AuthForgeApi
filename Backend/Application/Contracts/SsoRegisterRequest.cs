@@ -2,12 +2,12 @@
 
 namespace Application.Contracts
 {
-    public record RegisterRequest
-    (
+    public record SsoRegisterRequest(
         [Required(AllowEmptyStrings = false)] string FirstName,
         [Required(AllowEmptyStrings = false)] string LastName,
         [Required(AllowEmptyStrings = false), EmailAddress] string Email,
         [Required(AllowEmptyStrings = false)] string Password,
-        DateTime Birthdate
+        DateTime Birthdate,
+        Guid ClientId
     );
 }

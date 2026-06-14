@@ -4,9 +4,9 @@ GO
 USE AuthForge;
 GO
 
--- ==========================================
--- 1. BASE TABLES
--- ==========================================
+-- ==============================
+-- BASE TABLES
+-- ==============================
 
 CREATE TABLE Users
 (
@@ -21,9 +21,35 @@ CREATE TABLE Users
 );
 GO
 
--- ==========================================
--- 2. LOG TABLES
--- ==========================================
+CREATE TABLE Applications
+(
+    [Id] INT PRIMARY KEY IDENTITY(1, 1),
+    [Name] NVARCHAR(64) NOT NULL UNIQUE,
+    [ClientId] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [ClientSecret] NVARCHAR(256) NULL,
+    [IsActive] BIT NOT NULL DEFAULT 1,
+    [CreatedAtUtc] DATETIME2 NOT NULL DEFAULT GETUTCDATE()
+);
+GO
+
+CREATE TABLE UserApplications
+(
+    [Id] INT PRIMARY KEY IDENTITY(1, 1),
+    [UserId] INT NOT NULL,
+    [ApplicationId] INT NOT NULL,
+    [Roles] NVARCHAR(256) NULL,
+    [IsActive] BIT NOT NULL DEFAULT 1,
+    [CreatedAtUtc] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+
+    CONSTRAINT UQ_UserApplications_User_App UNIQUE (UserId, ApplicationId),
+    FOREIGN KEY (UserId) REFERENCES Users(Id),
+    FOREIGN KEY (ApplicationId) REFERENCES Applications(Id)
+);
+GO
+
+-- ==============================
+-- LOG TABLES
+-- ==============================
 
 CREATE TABLE UsersLog
 (
@@ -42,4 +68,32 @@ CREATE TABLE UsersLog
 GO
 
 CREATE NONCLUSTERED INDEX IX_UsersLog_RecordId ON UsersLog(RecordId);
+GO
+
+CREATE TABLE ApplicationsLog
+(
+    [Id] BIGINT PRIMARY KEY IDENTITY(1, 1),
+    [RecordId] INT NOT NULL, 
+    [Name] NVARCHAR(64) NULL,
+    [ClientId] UNIQUEIDENTIFIER NULL,
+    [ClientSecret] NVARCHAR(256) NULL,
+    [OperationUserId] INT NOT NULL, 
+    [OperationType] NVARCHAR(16) NOT NULL, 
+    [IsActive] BIT NOT NULL DEFAULT 1,
+    [CreatedAtUtc] DATETIME2 NOT NULL DEFAULT GETUTCDATE()
+);
+GO
+
+CREATE TABLE UserApplicationsLog
+(
+    [Id] BIGINT PRIMARY KEY IDENTITY(1, 1),
+    [RecordId] INT NOT NULL, 
+    [UserId] INT NULL,
+    [ApplicationId] INT NULL,
+    [Roles] NVARCHAR(256) NULL,
+    [OperationUserId] INT NOT NULL, 
+    [OperationType] NVARCHAR(16) NOT NULL, 
+    [IsActive] BIT NOT NULL DEFAULT 1,
+    [CreatedAtUtc] DATETIME2 NOT NULL DEFAULT GETUTCDATE()
+);
 GO

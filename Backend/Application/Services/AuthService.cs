@@ -11,13 +11,15 @@ namespace Application.Services
         ICryptoService cryptoService,
         IJwtService jwtService,
         IConfiguration configuration
-    ) : IAuthService
+    )
+        : IAuthService
     {
-        public async Task<int> RegisterAsync(RegisterRequest request)
+        public async Task<Result<int>> RegisterAsync(RegisterRequest request)
         {
             var existingUser = await usersRepository.GetByEmailAsync(request.Email);
+
             if (existingUser is not null)
-                throw new InvalidOperationException("Email is already in use.");
+                return Result<int>.Failure("Email is already in use.");
 
             var hashedPassword = cryptoService.HashPassword(request.Password);
 
@@ -30,20 +32,21 @@ namespace Application.Services
                 Birthdate = request.Birthdate
             };
 
-            return await usersRepository.CreateAsync(newUser);
+            var userId = await usersRepository.CreateAsync(newUser);
+            return Result<int>.Success(userId);
         }
 
-        public async Task<LoginResponse?> LoginAsync(LoginRequest request)
+        public async Task<Result<LoginResponse>> LoginAsync(LoginRequest request)
         {
             var user = await usersRepository.GetByEmailAsync(request.Email);
 
             if (user is null || !cryptoService.VerifyPassword(request.Password, user.PasswordHash))
-                return null; // Unauthorized
+                return Result<LoginResponse>.Failure("Invalid email or password.");
 
             var token = jwtService.GenerateToken(user);
             var expirationInMinutes = int.Parse(configuration["JwtSettings:ExpirationInMinutes"] ?? "60");
 
-            return new LoginResponse(user.Email, token, expirationInMinutes);
+            return Result<LoginResponse>.Success(new LoginResponse(user.Email, token, expirationInMinutes));
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Application.Interfaces
 {
     public interface IUsersService
     {
-        Task<IEnumerable<UserResponse>> GetAllAsync();
-        Task<UserResponse?> GetByIdAsync(int id);
+        Task<Result<IEnumerable<UserResponse>>> GetAllAsync();
+        Task<Result<UserResponse>> GetByEmailAsync(string email);
     }
 }
