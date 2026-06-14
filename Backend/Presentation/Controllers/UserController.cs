@@ -9,7 +9,8 @@ namespace Presentation.Controllers
     [Route("api/v1/[controller]")]
     public class UsersController(
         IUsersService usersService
-    ) : ControllerBase
+    )
+        : ControllerBase
     {
         /// <summary>
         /// Retrieves a list of all active users.
