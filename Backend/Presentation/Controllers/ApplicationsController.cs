@@ -22,14 +22,13 @@ namespace Presentation.Controllers
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (!int.TryParse(userIdString, out var userId))
-                return Unauthorized(new { Error = "Invalid user token." });
+                return Unauthorized(Result<string>.Failure("Invalid user token."));
 
             var result = await appsService.CreateApplicationAsync(request, userId);
 
-            if (!result.IsSuccess)
-                return BadRequest(new { result.Error });
-
-            return Created(string.Empty, new { ClientId = result.Value });
+            return result.IsSuccess
+                ? Created(string.Empty, result)
+                : BadRequest(result);
         }
 
         /// <summary>
@@ -43,14 +42,13 @@ namespace Presentation.Controllers
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (!int.TryParse(userIdString, out var requesterUserId))
-                return Unauthorized(new { Error = "Invalid user token." });
+                return Unauthorized(Result<string>.Failure("Invalid user token."));
 
             var result = await appsService.AssignUserAsync(request, requesterUserId);
 
-            if (!result.IsSuccess)
-                return BadRequest(new { result.Error });
-
-            return Ok(new { Message = "User assigned successfully." });
+            return result.IsSuccess
+                ? Ok(result)
+                : BadRequest(result);
         }
 
         /// <summary>
@@ -63,14 +61,13 @@ namespace Presentation.Controllers
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (!int.TryParse(userIdString, out var userId))
-                return Unauthorized(new { Error = "Invalid user token." });
+                return Unauthorized(Result<string>.Failure("Invalid user token."));
 
             var result = await appsService.GetUserApplicationsAsync(userId);
 
-            if (!result.IsSuccess)
-                return BadRequest(new { result.Error });
-
-            return Ok(result.Value);
+            return result.IsSuccess
+                ? Ok(result)
+                : BadRequest(result);
         }
     }
 }

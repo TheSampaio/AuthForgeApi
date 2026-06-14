@@ -51,7 +51,6 @@ namespace Application.Services
         {
             var result = await applicationsRepository.GetByUserIdAsync(userId);
             var response = result.Select(app => new ApplicationResponse(
-                app.Id,
                 app.Name,
                 app.ClientId
             ));

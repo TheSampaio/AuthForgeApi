@@ -17,11 +17,7 @@ namespace Presentation.Controllers
         public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request)
         {
             var result = await authService.LoginAsync(request);
-
-            if (!result.IsSuccess)
-                return Unauthorized(new { result.Error });
-
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result) : Unauthorized(result);
         }
 
         /// <summary>
@@ -33,11 +29,7 @@ namespace Presentation.Controllers
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest request)
         {
             var result = await authService.RegisterAsync(request);
-
-            if (!result.IsSuccess)
-                return BadRequest(new { result.Error });
-
-            return Created(string.Empty, new { UserId = result.Value });
+            return result.IsSuccess ? Created(string.Empty, result) : BadRequest(result);
         }
     }
 }

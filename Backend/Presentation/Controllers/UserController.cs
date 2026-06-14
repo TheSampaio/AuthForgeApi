@@ -24,17 +24,15 @@ namespace Presentation.Controllers
         }
 
         /// <summary>
-        /// Retrieves a specific user by their unique identifier.
+        /// Retrieves a user by their email address.
         /// </summary>
-        /// <param name="id">The unique identifier of the user.</param>
+        /// <param name="email">The email address of the user.</param>
         /// <returns>The requested user record, or HTTP 404 if not found.</returns>
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        [HttpGet("{email}")]
+        public async Task<IActionResult> GetByEmailAsync(string email)
         {
-            var result = await usersService.GetByIdAsync(id);
-            return result is null
-                ? NotFound()
-                : Ok(result);
+            var result = await usersService.GetByEmailAsync(email);
+            return result.IsSuccess ? Ok(result) : NotFound(result);
         }
     }
 }

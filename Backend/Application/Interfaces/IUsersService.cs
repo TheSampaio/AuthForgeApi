@@ -5,6 +5,6 @@ namespace Application.Interfaces
     public interface IUsersService
     {
         Task<Result<IEnumerable<UserResponse>>> GetAllAsync();
-        Task<Result<UserResponse>> GetByIdAsync(int id);
+        Task<Result<UserResponse>> GetByEmailAsync(string email);
     }
 }
